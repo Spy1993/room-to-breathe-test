@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en-IN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#f7f2e8">
+<title>Room to Breathe — Storefront Preview</title>
+<link rel="icon" href="data:,">
+<style>
+:root{color:#202d24;background:#f7f2e8;font:16px/1.55 Arial,sans-serif;--ink:#202d24;--line:#b8b6a6;--accent:#31503b}*{box-sizing:border-box}body{margin:0}main,header,footer{width:min(100% - 36px,920px);margin:auto}header,footer{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 0;border-bottom:1px solid var(--line)}footer{border:0;border-top:1px solid var(--line);font-size:.85rem}header strong{font-family:Georgia,serif;font-size:1.25rem}.badge,.eyebrow{font:700 .72rem/1.3 monospace;letter-spacing:.12em;text-transform:uppercase}.badge{background:#dedfce;padding:7px 10px}.hero{padding:clamp(32px,8vw,80px) 0 25px;max-width:650px}h1,h2{font-family:Georgia,serif;line-height:1.05;font-weight:400;margin:0}h1{font-size:clamp(2.6rem,8vw,5.4rem);letter-spacing:-.055em}h2{font-size:1.55rem}.hero p:last-child{max-width:43ch}.shop{display:grid;grid-template-columns:minmax(0,1fr) minmax(225px,.46fr);gap:clamp(14px,4vw,44px);margin:8px 0 36px;align-items:start}.product{border-top:1px solid var(--line);display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px 16px;padding:17px 0}.product p{margin:5px 0 0;font-size:.9rem}.product button{text-align:center}button{min-height:44px;padding:7px 12px;color:white;background:var(--accent);font:inherit;border:1px solid var(--accent);cursor:pointer}button:hover:not(:disabled){background:#213b29}button:focus-visible{outline:3px solid #a75c36;outline-offset:3px}button:disabled{color:#4a534a;background:#e8e8dc;border-color:#91978b;cursor:default}.basket{background:#e5e6d8;padding:18px}.basket p{margin:8px 0}.basket button{margin-top:6px}.basket ul{padding-left:19px;font-size:.9rem}.basket ul:empty{display:none}@media(max-width:630px){.shop{grid-template-columns:1fr}.product h2{font-size:1.32rem}.hero{padding-top:32px}}
+</style>
+</head>
+<body>
+<header><strong>Room to Breathe</strong><span class="badge">Demo only</span></header>
+<main>
+<section class="hero" aria-labelledby="title"><p class="eyebrow">Home organisation / Storefront preview</p><h1 id="title">Make space for what you keep.</h1><p>Two simple ways to tidy up your wardrobe. Try adding a product to the demo cart below. No orders or payments are taken.</p></section>
+<div class="shop">
+<section aria-label="Demo products">
+<article class="product"><div><h2>Saree organiser set</h2><p>6 zippered covers with clear windows.</p></div><button type="button" data-add="saree" aria-label="Add saree organiser set, 369 rupees">Add · ₹369</button></article>
+<article class="product"><div><h2>Vacuum storage set</h2><p>5 compression bags with a hand pump.</p></div><button type="button" data-add="vacuum" aria-label="Add vacuum storage set, 629 rupees">Add · ₹629</button></article>
+</section>
+<aside class="basket" aria-labelledby="cart-title"><h2 id="cart-title">Demo cart</h2><p id="summary" role="status">Cart is empty.</p><ul id="items"></ul><button type="button" id="clear" disabled>Clear cart</button></aside>
+</div>
+</main>
+<footer><span>Coolify test website</span><span>Sample products and prices</span></footer>
+<script>
+'use strict';
+const products = {saree:{name:'Saree organiser set',price:369,count:0},vacuum:{name:'Vacuum storage set',price:629,count:0}};
+const money = new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:0});
+const summary = document.querySelector('#summary');
+const items = document.querySelector('#items');
+const clear = document.querySelector('#clear');
+function render(){
+  let total=0, count=0;
+  items.replaceChildren();
+  for(const product of Object.values(products)){
+    if(!product.count) continue;
+    total+=product.price*product.count;
+    count+=product.count;
+    const line=document.createElement('li');
+    line.textContent=`${product.count} × ${product.name}`;
+    items.append(line);
+  }
+  summary.textContent=count?`${count} ${count===1?'item':'items'} · ${money.format(total)}`:'Cart is empty.';
+  clear.disabled=count===0;
+}
+for(const button of document.querySelectorAll('[data-add]')){
+  button.addEventListener('click',()=>{products[button.dataset.add].count+=1;render();});
+}
+clear.addEventListener('click',()=>{for(const product of Object.values(products))product.count=0;render();document.querySelector('[data-add]').focus();});
+</script>
+</body>
+</html>
